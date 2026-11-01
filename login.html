@@ -1,0 +1,29 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Login | JP Perfume Gallery</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&family=Jost:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css"></head><body>
+<section><div class="wrap"><form id="f" novalidate><h2 id="ttl">Log in</h2>
+<div id="nw" hidden><label for="nm">Full name</label><input id="nm" autocomplete="name"></div>
+<label for="em">Email</label><input id="em" type="email" autocomplete="email">
+<label for="pw">Password (6+ characters)</label><input id="pw" type="password" autocomplete="current-password">
+<div class="err" id="er" role="alert"></div><button class="btn" id="go">Log in</button>
+<p class="swap" id="sw">New here? <a id="tg" tabindex="0">Create an account</a></p></form></div></section>
+<script src="script.js"></script>
+<script>
+let signup=false;const $=i=>document.getElementById(i),er=$('er');
+const users=()=>JSON.parse(localStorage.getItem('jp_users')||'[]');
+function mode(){$('nw').hidden=!signup;$('ttl').textContent=signup?'Create account':'Log in';$('go').textContent=signup?'Create account':'Log in';
+$('sw').innerHTML=signup?'Have an account? <a id="tg" tabindex="0">Log in</a>':'New here? <a id="tg" tabindex="0">Create an account</a>';bind();er.textContent=''}
+function bind(){$('tg').onclick=()=>{signup=!signup;mode()}}bind();
+$('f').onsubmit=e=>{e.preventDefault();er.className='err';
+const n=$('nm').value.trim(),m=$('em').value.trim().toLowerCase(),p=$('pw').value;
+if(signup&&n.length<2)return er.textContent='Enter your full name.';
+if(!/^\S+@\S+\.\S+$/.test(m))return er.textContent='Enter a valid email, like name@example.com.';
+if(p.length<6)return er.textContent='Password must be at least 6 characters.';
+let u=users();
+if(signup){if(u.some(x=>x.m===m))return er.textContent='This email is already registered. Log in instead.';
+u.push({n,m,p});localStorage.setItem('jp_users',JSON.stringify(u));
+localStorage.setItem('jp_session',JSON.stringify({name:n,email:m}));location.href=sessionStorage.getItem('jp_after_login')||'index.html';sessionStorage.removeItem('jp_after_login')}
+else{const x=u.find(x=>x.m===m&&x.p===p);if(!x)return er.textContent='Email or password is wrong. Check and try again.';
+localStorage.setItem('jp_session',JSON.stringify({name:x.n,email:m}));location.href=sessionStorage.getItem('jp_after_login')||'index.html';sessionStorage.removeItem('jp_after_login')}};
+</script></body></html>

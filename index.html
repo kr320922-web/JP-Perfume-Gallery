@@ -1,0 +1,59 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JP Perfume Gallery | Perfumes and Attars in Ludhiana</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&family=Jost:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css"></head><body>
+<div class="hero"><div class="wrap"><div>
+<h1>Wear a scent that is yours</h1>
+<p>Explore perfume styles, attars and gift inspiration at JP Perfume Gallery in Ludhiana.</p>
+<a class="btn" href="collection.html">EXPLORE COLLECTION</a><a class="btn ghost" href="about.html">VISIT THE SHOP</a></div>
+<div class="art" id="art"><img class="hero-photo" src="https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=1200&q=85" alt="Luxury perfume bottle photographed in a studio"></div></div></div>
+<div class="strip">OUD &nbsp; ROSE &nbsp; AMBER &nbsp; MUSK &nbsp; SAFFRON</div>
+<section class="light"><div class="wrap"><div class="head"><h2>Featured fragrances</h2><p>Illustrative perfume concepts with approximate prices. Confirm actual products and offers with JP Perfume Gallery.</p></div>
+<div class="grid" id="feat"></div><p class="disclaimer">Images are AI-generated design concepts, not verified photos of the retail products.</p><p style="text-align:center"><a class="btn" href="collection.html#hamper">CREATE YOUR GIFT HAMPER</a></p></div></section>
+<section class="alt"><div class="wrap two"><div class="frame"><div class="in"><img src="https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=1000&q=85" alt="Perfume display photography; not a photo of JP Perfume Gallery"></div></div>
+<div><h2>A gallery of fragrance</h2><p>JP Perfume Gallery is a perfume store on Radha Swami Road, Urban Estate Phase II. Come in, try a scent on your skin, and take your time.</p>
+<p>Please call to confirm current opening hours.</p><a class="btn" href="about.html">FIND US</a></div></div></section>
+<section><div class="wrap"><div class="head"><h2>Why shop with us</h2></div><div class="why">
+<div><h3>Try before you buy</h3><p>Test a scent and let it settle on your skin before you decide.</p></div>
+<div><h3>Honest advice</h3><p>Tell us your budget and occasion. We suggest what suits you.</p></div>
+<div><h3>Ready to gift</h3><p>Neatly packed for weddings, birthdays and festivals.</p></div></div></div></section>
+<section class="light" id="quiz"><div class="wrap"><div class="head"><h2>Find your perfect scent</h2><p>Answer eight quick questions and we will suggest perfumes from our collection.</p></div>
+<div class="quiz" id="quiz-box"></div></div></section>
+<section ><div class="wrap head"><h2>Loved by Ludhiana</h2><p>Explore the shop location and customer reviews on Google Maps.</p><br><a class="btn ghost" href="https://www.google.com/maps/search/JP+perfume+gallery+Ludhiana" target="_blank" rel="noopener">READ REVIEWS ON GOOGLE</a></div></section>
+<script src="products.js"></script><script src="script.js"></script>
+<script>document.getElementById('feat').innerHTML=PRODUCTS.slice(0,4).map(card).join('');loadMatchingPhotos(document.getElementById('feat'));
+</script><script>
+const Q=[
+{q:'Who is the perfume for?',k:'who',o:['Men','Women','Anyone']},
+{q:'Which scent family do you like?',k:'fam',o:['Woody and warm','Floral','Fresh and clean','Sweet and rich']},
+{q:'What is the occasion?',k:'occ',o:['Daily use','Party or date','Wedding or festival','A gift']},
+{q:'Which word describes you best?',k:'mood',o:['Calm','Bold','Romantic','Cheerful']},
+{q:'When will you wear it most?',k:'seas',o:['Summer days','Winter evenings','All year round']},
+{q:'How strong should it be?',k:'str',o:['Light and subtle','Noticeable','Long-lasting and bold']},
+{q:'Spray or traditional attar?',k:'type',o:['Spray perfume','Attar','Both are fine']},
+{q:'What is your budget?',k:'bud',o:['Under ₹1000','₹1000 to ₹1500','Above ₹1500','Any budget']}];
+// per product: scent family, strength (0 light, 1 medium, 2 bold), season (0 summer, 1 winter, 2 all year)
+const META=Object.fromEntries(PRODUCTS.map(p=>[p.n,[p.fam,p.strength,p.season]]));
+const MOOD=[[2,1],[0],[1,3],[2,3]];
+const LIM=[1000,1500,99999,99999];
+let qi=0,ans={};const box=document.getElementById('quiz-box');
+function ask(){const x=Q[qi];box.innerHTML=`<div class="bar"><i style="width:${qi/Q.length*100}%"></i></div><div class="step">QUESTION ${qi+1} OF ${Q.length}</div><h3>${x.q}</h3><div class="opts">${x.o.map((t,i)=>`<button data-i="${i}">${t}</button>`).join('')}</div>`;
+box.querySelectorAll('button').forEach(b=>b.onclick=()=>{ans[x.k]=+b.dataset.i;qi++;qi<Q.length?ask():done()})}
+function done(){const sc=PRODUCTS.map(p=>{let s=0;const m=META[p.n],g=['Men','Women'][ans.who];
+if(ans.who===2||p.c==='Unisex'||p.c==='Attar'||p.c===g)s+=2;
+if(ans.who<2&&p.c===g)s+=2;
+if(m[0]===ans.fam)s+=4;
+if(MOOD[ans.mood].includes(m[0]))s+=2;
+if(m[2]===2||ans.seas===2||m[2]===ans.seas)s+=2;
+s+=Math.max(0,3-Math.abs(m[1]-ans.str)*2);
+if(ans.type===1&&p.c==='Attar')s+=4;
+if(ans.type===0&&p.c!=='Attar')s+=3;
+if(ans.occ===2&&p.c==='Attar')s+=2;
+if(ans.occ===1&&p.p>=1300)s+=1;
+if(ans.occ===0&&p.p<=1300)s+=1;
+if(p.p<=LIM[ans.bud])s+=3;else s-=3;
+return{p,s}}).sort((a,b)=>b.s-a.s).slice(0,2);
+box.innerHTML=`<div class="bar"><i style="width:100%"></i></div><div class="step">YOUR MATCHES</div><h3>We think you will love these</h3><div class="res">${sc.map(r=>card(r.p)).join('')}</div><a class="btn" href="collection.html">SEE FULL COLLECTION</a><button class="btn ghost" id="again">TAKE QUIZ AGAIN</button>`;
+document.getElementById('again').onclick=()=>{qi=0;ans={};ask()};
+loadMatchingPhotos(box)}
+ask();</script></body></html>

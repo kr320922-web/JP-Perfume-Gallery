@@ -1,0 +1,1 @@
+New single-row navbar: original dark plum/gold colors; larger text; no menu icons, flowers or double frame; JP logo left, centered links, right-side actions. Existing pages/features unchanged.
