@@ -1,5 +1,6 @@
 
 const PRODUCTS = [
+  // EXISTING PREMIUM PERFUMES
   {
     "n": "Dior Sauvage",
     "c": "Men",
@@ -95,130 +96,109 @@ const PRODUCTS = [
     "fam": 0,
     "strength": 2,
     "season": 2
-  }
-  
-,
-{
-  "n": "Bella Vita CEO Man",
-  "c": "Men",
-  "s": "100 ml",
-  "p": 599,
-  "i": "",
-  "a": "#45314b",
-  "b": "#160d19",
-  "fam": 0,
-  "strength": 1,
-  "season": 0
-},
-{
-  "n": "Wild Stone Edge",
-  "c": "Men",
-  "s": "100 ml",
-  "p": 499,
-  "i": "",
-  "a": "#45314b",
-  "b": "#160d19",
-  "fam": 0,
-  "strength": 1,
-  "season": 0
-},
-{
-  "n": "Fogg Scent Impressio",
-  "c": "Men",
-  "s": "100 ml",
-  "p": 549,
-  "i": "",
-  "a": "#45314b",
-  "b": "#160d19",
-  "fam": 1,
-  "strength": 1,
-  "season": 1
-},
-{
-  "n": "Engage L'amante",
-  "c": "Women",
-  "s": "100 ml",
-  "p": 699,
-  "i": "",
-  "a": "#45314b",
-  "b": "#160d19",
-  "fam": 1,
-  "strength": 1,
-  "season": 1
-},
-{
-  "n": "Denver Hamilton",
-  "c": "Men",
-  "s": "100 ml",
-  "p": 449,
-  "i": "",
-  "a": "#45314b",
-  "b": "#160d19",
-  "fam": 0,
-  "strength": 1,
-  "season": 0
-},
-{
-  "n": "Ajmal Raindrops",
-  "c": "Women",
-  "s": "50 ml",
-  "p": 1500,
-  "i": "",
-  "a": "#45314b",
-  "b": "#160d19",
-  "fam": 1,
-  "strength": 1,
-  "season": 1
-},
-{
-  "n": "Lattafa Asad",
-  "c": "Men",
-  "s": "100 ml",
-  "p": 2200,
-  "i": "",
-  "a": "#45314b",
-  "b": "#160d19",
-  "fam": 3,
-  "strength": 2,
-  "season": 2
-},
-{
-  "n": "Armaf Tres Nuit",
-  "c": "Men",
-  "s": "100 ml",
-  "p": 2500,
-  "i": "",
-  "a": "#45314b",
-  "b": "#160d19",
-  "fam": 0,
-  "strength": 1,
-  "season": 0
-},
-{
-  "n": "Rasasi Hawas",
-  "c": "Men",
-  "s": "100 ml",
-  "p": 3800,
-  "i": "",
-  "a": "#45314b",
-  "b": "#160d19",
-  "fam": 0,
-  "strength": 1,
-  "season": 1
-},
-{
-  "n": "Afnan 9PM",
-  "c": "Men",
-  "s": "100 ml",
-  "p": 3200,
-  "i": "",
-  "a": "#45314b",
-  "b": "#160d19",
-  "fam": 3,
-  "strength": 2,
-  "season": 2
-}
+  },
 
+  // AFFORDABLE PERFUMES
+  {
+    "n": "Bella Vita CEO Man",
+    "c": "Men",
+    "s": "100 ml",
+    "p": 599,
+    "i": "bella-vita-ceo-man.png",
+    "a": "#45314b",
+    "b": "#160d19",
+    "fam": 0,
+    "strength": 1,
+    "season": 0
+  },
+  {
+    "n": "Wild Stone Edge",
+    "c": "Men",
+    "s": "100 ml",
+    "p": 499,
+    "i": "wild-stone-edge.png",
+    "a": "#45314b",
+    "b": "#160d19",
+    "fam": 0,
+    "strength": 1,
+    "season": 0
+  },
+  {
+    "n": "Fogg Scent Impressio",
+    "c": "Men",
+    "s": "100 ml",
+    "p": 549,
+    "i": "fogg-impressio.png",
+    "a": "#45314b",
+    "b": "#160d19",
+    "fam": 1,
+    "strength": 1,
+    "season": 1
+  },
+
+  // MID-RANGE PERFUMES
+  {
+    "n": "Lattafa Asad",
+    "c": "Men",
+    "s": "100 ml",
+    "p": 2200,
+    "i": "lattafa-asad.png",
+    "a": "#45314b",
+    "b": "#160d19",
+    "fam": 3,
+    "strength": 2,
+    "season": 2
+  },
+  {
+    "n": "Rasasi Hawas",
+    "c": "Men",
+    "s": "100 ml",
+    "p": 3800,
+    "i": "rasasi-hawas.png",
+    "a": "#45314b",
+    "b": "#160d19",
+    "fam": 0,
+    "strength": 1,
+    "season": 1
+  },
+  {
+    "n": "Afnan 9PM",
+    "c": "Men",
+    "s": "100 ml",
+    "p": 3200,
+    "i": "afnan-9pm.png",
+    "a": "#45314b",
+    "b": "#160d19",
+    "fam": 3,
+    "strength": 2,
+    "season": 2
+  },
+
+  // ATTARS
+  {
+    "n": "Al Rehab Choco Musk",
+    "c": "Attar",
+    "s": "6 ml",
+    "p": 350,
+    "i": "al-rehab-choco-musk.png",
+    "a": "#45314b",
+    "b": "#160d19",
+    "fam": 3,
+    "strength": 1,
+    "season": 2
+  },
+  {
+    "n": "Ajmal Royal Misk Rijali",
+    "c": "Attar",
+    "s": "10 ml",
+    "p": 700,
+    "i": "ajmal-misk-rijali.png",
+    "a": "#45314b",
+    "b": "#160d19",
+    "fam": 0,
+    "strength": 1,
+    "season": 0
+  }
 ];
 
 const INR = n => '₹' + Number(n).toLocaleString('en-IN');
@@ -254,7 +234,7 @@ function card(x) {
   return `<article class="card">
     <div class="ph">
       ${x.i
-        ? `<img src="${esc(x.i)}" alt="${esc(x.n)} product image (some premium visuals are illustrative)" loading="lazy">`
+        ? `<img src="${esc(x.i)}" alt="${esc(x.n)} product image" loading="lazy">`
         : `<div class="budget-visual">
              <span>JP PERFUME GALLERY</span>
              <strong>${esc(x.n)}</strong>
