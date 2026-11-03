@@ -9,6 +9,39 @@
 
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&family=Jost:wght@300;400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+
+  <style>
+    .checkout-panel .checkout-btn {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      text-align: center;
+      background: #642e4c;
+      color: #fff;
+      padding: 15px 18px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 600;
+      margin-top: 20px;
+    }
+
+    .checkout-panel .checkout-btn:hover {
+      background: #4a1e37;
+    }
+
+    .checkout-panel .checkout-btn.disabled {
+      opacity: .45;
+      pointer-events: none;
+      cursor: not-allowed;
+    }
+
+    .checkout-panel .checkout-note {
+      font-size: 13px;
+      opacity: .75;
+      line-height: 1.7;
+      margin-top: 15px;
+    }
+  </style>
 </head>
 
 <body>
@@ -20,9 +53,13 @@
   <div class="wrap">
     <div class="head">
       <h2>Our Collection</h2>
-      <p>Explore our collection of premium, affordable and mid-range perfumes, along with traditional attars.</p>
+      <p>
+        Explore our collection of premium, affordable and
+        mid-range perfumes, along with traditional attars.
+      </p>
       <p class="disclaimer">
-        Product images are for reference. Prices are estimates; confirm with JP Perfume Gallery.
+        Product images are for reference. Prices are estimates;
+        confirm with JP Perfume Gallery.
       </p>
     </div>
 
@@ -35,56 +72,48 @@
   <div class="wrap">
     <div class="head">
       <h2>Shopping Bag & Checkout</h2>
-      <p>Log in to add items. Final prices and availability are confirmed by JP Perfume Gallery on WhatsApp.</p>
+      <p>
+        Add your favourite fragrances to your bag
+        and proceed to our demo checkout.
+      </p>
     </div>
 
     <div class="bag-layout">
+
       <div id="bag-items"></div>
 
       <div class="checkout-panel">
-        <h3>Checkout Enquiry</h3>
+        <h3>Order Summary</h3>
+
         <p id="bag-total"></p>
 
-        <form id="checkout-form">
-          <label>
-            Name
-            <input name="name" required minlength="2" placeholder="Full name">
-          </label>
+        <p>
+          Review your selected perfumes and continue
+          to checkout.
+        </p>
 
-          <label>
-            Phone
-            <input name="phone" required pattern="[0-9+\s-]{10,15}" placeholder="Mobile number">
-          </label>
+        <a
+          href="checkout.html"
+          id="proceed-checkout"
+          class="checkout-btn disabled"
+          aria-disabled="true">
+          Proceed to Checkout →
+        </a>
 
-          <label>
-            Order preference
-            <select name="method" required>
-              <option value="Store pickup">Store pickup</option>
-              <option value="Delivery enquiry">Delivery enquiry</option>
-            </select>
-          </label>
-
-          <label>
-            Address / notes
-            <textarea name="notes" rows="3" placeholder="Address if delivery, or any special instructions"></textarea>
-          </label>
-
-          <button class="btn" type="submit">
-            Send Order Enquiry on WhatsApp
-          </button>
-        </form>
-
-        <p class="price-note">
-          This is an enquiry, not a paid or confirmed order. No online payment is collected.
+        <p class="checkout-note">
+          Demo checkout includes customer details,
+          UPI simulation, card simulation and
+          Cash on Delivery simulation.
+          No real payments are processed.
         </p>
       </div>
+
     </div>
   </div>
 </section>
 
-<!-- UPDATED SCRIPT LINKS -->
-<script src="products.js?v=20261103-5"></script>
-<script src="script.js?v=20261103-5"></script>
+<script src="products.js?v=20261103-6"></script>
+<script src="script.js?v=20261103-6"></script>
 
 <script>
 const cats = ['All', 'Men', 'Women', 'Unisex', 'Attar'];
@@ -146,8 +175,13 @@ function renderBag() {
       </div>
     `;
   } else if (!rows.length) {
-    box.innerHTML =
-      '<p>Your shopping bag is empty. Choose a perfume from the collection above.</p>';
+    box.innerHTML = `
+      <div class="bag-empty">
+        <h3>Your shopping bag is empty</h3>
+        <p>Choose a perfume from the collection above.</p>
+        <a class="btn" href="#list">Browse Collection</a>
+      </div>
+    `;
   } else {
     box.innerHTML = rows.map(([id, q]) => `
       <div class="bag-row">
@@ -157,10 +191,21 @@ function renderBag() {
         </div>
 
         <div class="qty">
-          <button data-op="minus" data-id="${id}" aria-label="Decrease quantity">−</button>
+          <button
+            data-op="minus"
+            data-id="${id}"
+            aria-label="Decrease quantity">−</button>
+
           <span>${q}</span>
-          <button data-op="plus" data-id="${id}" aria-label="Increase quantity">+</button>
-          <button data-op="remove" data-id="${id}">Remove</button>
+
+          <button
+            data-op="plus"
+            data-id="${id}"
+            aria-label="Increase quantity">+</button>
+
+          <button
+            data-op="remove"
+            data-id="${id}">Remove</button>
         </div>
       </div>
     `).join('');
@@ -174,8 +219,12 @@ function renderBag() {
   document.getElementById('bag-total').textContent =
     'Estimated total: ' + INR(total);
 
-  document.querySelector('#checkout-form button').disabled =
-    !user || !rows.length;
+  const checkoutLink = document.getElementById('proceed-checkout');
+  const canCheckout = Boolean(user && rows.length);
+
+  checkoutLink.classList.toggle('disabled', !canCheckout);
+  checkoutLink.setAttribute('aria-disabled', String(!canCheckout));
+  checkoutLink.tabIndex = canCheckout ? 0 : -1;
 }
 
 document.getElementById('bag-items').addEventListener('click', e => {
@@ -198,52 +247,20 @@ document.getElementById('bag-items').addEventListener('click', e => {
   renderBag();
 });
 
-document.getElementById('checkout-form').addEventListener('submit', e => {
-  e.preventDefault();
+document.getElementById('proceed-checkout').addEventListener('click', e => {
+  const cart = user ? getCart() : {};
+  const hasItems = Object.entries(cart).some(
+    ([id, q]) => PRODUCTS[id] && Number(q) > 0
+  );
 
-  if (!user) {
-    location.href = 'login.html';
-    return;
+  if (!user || !hasItems) {
+    e.preventDefault();
+    alert(
+      !user
+        ? 'Please log in before checkout.'
+        : 'Your shopping bag is empty.'
+    );
   }
-
-  const c = getCart();
-
-  const rows = Object.entries(c).filter(
-    ([id, q]) => PRODUCTS[id] && q > 0
-  );
-
-  if (!rows.length) {
-    alert('Your bag is empty');
-    return;
-  }
-
-  const f = new FormData(e.target);
-
-  const total = rows.reduce(
-    (a, [id, q]) => a + PRODUCTS[id].p * q,
-    0
-  );
-
-  const msg = [
-    'Hello JP Perfume Gallery, I would like to enquire about an order:',
-    '',
-    ...rows.map(([id, q]) =>
-      `${PRODUCTS[id].n} (${PRODUCTS[id].s}) × ${q} — approx. ${INR(PRODUCTS[id].p * q)}`
-    ),
-    '',
-    'Estimated total: ' + INR(total),
-    'Name: ' + f.get('name'),
-    'Phone: ' + f.get('phone'),
-    'Preference: ' + f.get('method'),
-    'Address/notes: ' + f.get('notes'),
-    'Please confirm actual selling prices and availability.'
-  ].join('\n');
-
-  window.open(
-    'https://wa.me/918847400800?text=' + encodeURIComponent(msg),
-    '_blank',
-    'noopener'
-  );
 });
 
 renderBag();
