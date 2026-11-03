@@ -1,14 +1,112 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>About and Contact | JP Perfume Gallery</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&family=Jost:wght@300;400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css"></head><body>
-<section class="alt"><div class="wrap two"><div><h2>About the shop</h2>
-<p>JP Perfume Gallery is a perfume store in Urban Estate Phase II, Ludhiana. Explore fragrances and ask the shop about current perfumes, attars and gifting options.</p>
-<h2 style="margin-top:30px">Contact us</h2>
-<p><b>Address:</b> Radha Swami Rd, Opposite Jain School, Urban Estate Phase II, Guru Teg Bahadur Nagar, Ludhiana, Punjab 141015</p>
-<p><b>Phone:</b> <a href="tel:08847400800">088474 00800</a></p>
-<p><b>Hours:</b> Please call to confirm current opening hours</p>
-<a class="btn" href="https://wa.me/918847400800" target="_blank" rel="noopener">Chat on WhatsApp</a></div>
-<div><div class="frame" style="aspect-ratio:4/3"><div class="in"><img src="https://images.unsplash.com/photo-1615634260167-c8cdede054de?auto=format&fit=crop&w=1000&q=85" alt="Illustrative perfume photography, not the actual shop storefront"></div></div>
-<iframe title="Map" loading="lazy" src="https://www.google.com/maps?q=JP+perfume+gallery+Ludhiana&output=embed"></iframe></div></div></section>
-<script src="script.js"></script></body></html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>About and Contact | JP Perfume Gallery</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&family=Jost:wght@300;400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    .shop-photo-frame {
+      border: 1px solid #d8b66d;
+      padding: 14px;
+      background: #24131e;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .shop-photo-frame img {
+      display: block;
+      width: 100%;
+      height: 470px;
+      object-fit: contain;
+      object-position: center;
+    }
+
+    .shop-photo-caption {
+      text-align: center;
+      color: #e7c37b;
+      font-size: 14px;
+      margin: 12px 0 20px;
+      letter-spacing: 1px;
+    }
+
+    @media (max-width: 768px) {
+      .shop-photo-frame img {
+        height: 350px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<section class="alt">
+  <div class="wrap two">
+
+    <div>
+      <h2>About the shop</h2>
+
+      <p>
+        JP Perfume Gallery is a perfume store in Urban Estate
+        Phase II, Ludhiana. Explore fragrances and ask the
+        shop about current perfumes, attars and gifting options.
+      </p>
+
+      <h2 style="margin-top:30px">Contact us</h2>
+
+      <p>
+        <b>Address:</b>
+        Radha Swami Rd, Opposite Jain School,
+        Urban Estate Phase II, Guru Teg Bahadur Nagar,
+        Ludhiana, Punjab 141015
+      </p>
+
+      <p>
+        <b>Phone:</b>
+        <a href="tel:08847400800">088474 00800</a>
+      </p>
+
+      <p>
+        <b>Hours:</b>
+        Please call to confirm current opening hours
+      </p>
+
+      <a
+        class="btn"
+        href="https://wa.me/918847400800"
+        target="_blank"
+        rel="noopener">
+        Chat on WhatsApp
+      </a>
+    </div>
+
+    <div>
+      <div class="shop-photo-frame">
+        <img
+          src="shop.jpg"
+          alt="JP Perfume Gallery actual shop storefront in Ludhiana">
+      </div>
+
+      <p class="shop-photo-caption">
+        JP PERFUME GALLERY — OUR STORE
+      </p>
+
+      <iframe
+        title="JP Perfume Gallery Location Map"
+        loading="lazy"
+        src="https://www.google.com/maps?q=JP+perfume+gallery+Ludhiana&output=embed">
+      </iframe>
+    </div>
+
+  </div>
+</section>
+
+<script src="script.js?v=20261103-9"></script>
+
+</body>
+</html>
