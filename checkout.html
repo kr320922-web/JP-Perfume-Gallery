@@ -1,0 +1,227 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout | JP Perfume Gallery</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .checkout-wrap{max-width:1100px;margin:55px auto;padding:0 20px}
+    .checkout-wrap h1{font-size:38px;margin-bottom:8px}
+    .checkout-sub{opacity:.7;margin-bottom:30px}
+    .checkout-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:25px}
+    .checkout-box{background:#fff;border:1px solid #e9dfe5;border-radius:18px;padding:25px;margin-bottom:22px;color:#321d2c}
+    .checkout-box h2{font-size:22px;margin:0 0 20px}
+    .field{margin-bottom:16px}
+    .field label{display:block;margin-bottom:7px;font-weight:600;font-size:14px}
+    .field input,.field textarea,.field select{width:100%;padding:12px;border:1px solid #d9cbd3;border-radius:9px;font:inherit;background:#fff;color:#321d2c;box-sizing:border-box}
+    .field textarea{min-height:90px;resize:vertical}
+    .two-fields{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .payment-option{display:block;border:1px solid #e0d4db;padding:14px;border-radius:10px;margin-bottom:10px;cursor:pointer}
+    .payment-option input{margin-right:9px;accent-color:#642e4c}
+    .checkout-btn{width:100%;background:#642e4c;color:white;border:0;border-radius:10px;padding:15px;font:inherit;font-weight:700;cursor:pointer}
+    .checkout-btn:hover{background:#4a1e37}
+    .order-item{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #eee}
+    .order-total{display:flex;justify-content:space-between;font-size:21px;font-weight:700;margin:20px 0}
+    .demo-note{background:#fff6e3;padding:12px;border-radius:9px;font-size:13px;margin:15px 0;color:#704b17}
+    .empty-checkout{text-align:center;padding:40px}
+    .success-box{text-align:center;max-width:650px;margin:55px auto;background:white;color:#321d2c;border-radius:20px;padding:40px 25px}
+    .success-box h1{color:#287747}
+    .small-link{display:inline-block;margin-top:20px;color:#642e4c}
+    #success-screen{display:none}
+    @media(max-width:760px){.checkout-grid{grid-template-columns:1fr}.two-fields{grid-template-columns:1fr}.checkout-wrap h1{font-size:30px}}
+  </style>
+</head>
+<body>
+
+<main class="checkout-wrap" id="checkout-screen">
+  <h1>Secure-Style Checkout</h1>
+  <p class="checkout-sub">Complete your order with our demo checkout experience.</p>
+
+  <div class="checkout-grid">
+    <section>
+      <form id="checkout-form">
+        <div class="checkout-box">
+          <h2>1. Customer Details</h2>
+
+          <div class="field">
+            <label for="customer-name">Full Name</label>
+            <input id="customer-name" required autocomplete="name">
+          </div>
+
+          <div class="two-fields">
+            <div class="field">
+              <label for="customer-phone">Phone Number</label>
+              <input id="customer-phone" type="tel" required pattern="[0-9]{10}" maxlength="10" placeholder="10-digit number">
+            </div>
+            <div class="field">
+              <label for="customer-email">Email Address</label>
+              <input id="customer-email" type="email" required autocomplete="email">
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="customer-address">Delivery Address</label>
+            <textarea id="customer-address" required placeholder="House no., street, area, city, PIN code"></textarea>
+          </div>
+        </div>
+
+        <div class="checkout-box">
+          <h2>2. Payment Method</h2>
+
+          <label class="payment-option">
+            <input type="radio" name="payment" value="UPI Demo" checked>
+            UPI Payment (Demo)
+          </label>
+
+          <label class="payment-option">
+            <input type="radio" name="payment" value="Card Demo">
+            Debit / Credit Card (Demo)
+          </label>
+
+          <label class="payment-option">
+            <input type="radio" name="payment" value="Cash on Delivery Demo">
+            Cash on Delivery (Demo)
+          </label>
+
+          <div id="payment-info"></div>
+
+          <div class="demo-note">
+            This is a college project demonstration. No real payments are processed, no card credentials are collected, and no real order is sent to the store.
+          </div>
+        </div>
+
+        <button type="submit" class="checkout-btn" id="place-order">
+          Place Demo Order
+        </button>
+      </form>
+    </section>
+
+    <aside>
+      <div class="checkout-box">
+        <h2>Your Order Summary</h2>
+        <div id="order-items"></div>
+        <div class="order-total">
+          <span>Total</span>
+          <span id="order-total">₹0</span>
+        </div>
+        <p style="font-size:12px;opacity:.7">Prices are illustrative. Shipping and taxes are not calculated.</p>
+        <a href="collection.html#bag" class="small-link">← Back to Shopping Bag</a>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<main id="success-screen" class="success-box">
+  <div style="font-size:55px">✓</div>
+  <h1>Demo Order Placed!</h1>
+  <p>Your checkout simulation was successful.</p>
+  <h2 id="success-id"></h2>
+  <p id="success-detail"></p>
+  <p class="demo-note">Demo only — no payment was charged and no real order was placed.</p>
+  <a href="collection.html" class="small-link">Continue Shopping</a>
+</main>
+
+<script src="products.js?v=20261103-6"></script>
+<script src="script.js?v=20261103-6"></script>
+<script>
+(function(){
+  const itemsEl = document.getElementById('order-items');
+  const totalEl = document.getElementById('order-total');
+  const form = document.getElementById('checkout-form');
+
+  if (!user) {
+    sessionStorage.setItem('jp_after_login', 'checkout.html');
+    location.replace('login.html');
+    return;
+  }
+
+  document.getElementById('customer-name').value = user.name || '';
+  document.getElementById('customer-email').value = user.email || '';
+
+  const cart = getCart();
+  let total = 0;
+  let validItems = 0;
+
+  for (const [id, qtyValue] of Object.entries(cart)) {
+    const idNumber = Number(id);
+    const qty = Number(qtyValue);
+    const product = PRODUCTS[idNumber];
+
+    if (!product || !Number.isInteger(qty) || qty <= 0) continue;
+
+    const subtotal = product.p * qty;
+    total += subtotal;
+    validItems++;
+
+    const row = document.createElement('div');
+    row.className = 'order-item';
+
+    const name = document.createElement('span');
+    name.textContent = product.n + ' × ' + qty;
+
+    const price = document.createElement('strong');
+    price.textContent = '₹' + subtotal.toLocaleString('en-IN');
+
+    row.append(name, price);
+    itemsEl.appendChild(row);
+  }
+
+  totalEl.textContent = '₹' + total.toLocaleString('en-IN');
+
+  if (!validItems) {
+    itemsEl.innerHTML = '<div class="empty-checkout">Your bag is empty.<p><a href="collection.html">Browse Perfumes</a></p></div>';
+    document.getElementById('place-order').disabled = true;
+  }
+
+  const paymentInfo = document.getElementById('payment-info');
+
+  function updatePayment() {
+    const selected = document.querySelector('input[name="payment"]:checked').value;
+
+    if (selected === 'UPI Demo') {
+      paymentInfo.innerHTML = '<p class="demo-note">Demo UPI payment selected. No real UPI ID or PIN is required.</p>';
+    } else if (selected === 'Card Demo') {
+      paymentInfo.innerHTML = '<p class="demo-note">Demo card payment selected. Please do not enter real card information.</p>';
+    } else {
+      paymentInfo.innerHTML = '<p class="demo-note">Cash on Delivery simulation selected. No actual delivery will be arranged.</p>';
+    }
+  }
+
+  document.querySelectorAll('input[name="payment"]').forEach(input => {
+    input.addEventListener('change', updatePayment);
+  });
+  updatePayment();
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    if (!validItems) return;
+
+    const method = document.querySelector('input[name="payment"]:checked').value;
+    const orderId = 'DEMO-' + Date.now().toString().slice(-8);
+
+    const demoOrder = {
+      id: orderId,
+      name: document.getElementById('customer-name').value.trim(),
+      method,
+      total,
+      date: new Date().toISOString()
+    };
+
+    localStorage.setItem('jp_last_demo_order', JSON.stringify(demoOrder));
+
+    setCart({});
+
+    document.getElementById('checkout-screen').style.display = 'none';
+    document.getElementById('success-screen').style.display = 'block';
+    document.getElementById('success-id').textContent = 'Order ID: ' + orderId;
+    document.getElementById('success-detail').textContent =
+      'Payment Method: ' + method + ' | Total: ₹' + total.toLocaleString('en-IN');
+
+    window.scrollTo(0, 0);
+  });
+})();
+</script>
+</body>
+</html>
