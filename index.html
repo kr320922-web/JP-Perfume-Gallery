@@ -128,9 +128,9 @@
   </div>
 </section>
 
-<!-- UPDATED JAVASCRIPT FILES -->
-<script src="products.js?v=20261103-4"></script>
-<script src="script.js?v=20261103-4"></script>
+<!-- LOAD LATEST PRODUCT DATA -->
+<script src="products.js?v=20261103-6"></script>
+<script src="script.js?v=20261103-6"></script>
 
 <!-- FEATURED PRODUCTS -->
 <script>
@@ -140,7 +140,7 @@
   loadMatchingPhotos(document.getElementById('feat'));
 </script>
 
-<!-- FRAGRANCE QUIZ -->
+<!-- UPDATED FRAGRANCE QUIZ -->
 <script>
 const Q = [
   {
@@ -185,18 +185,12 @@ const Q = [
   }
 ];
 
-const META = Object.fromEntries(
-  PRODUCTS.map(p => [p.n, [p.fam, p.strength, p.season]])
-);
-
 const MOOD = [
   [2, 1],
   [0],
   [1, 3],
   [2, 3]
 ];
-
-const LIM = [1000, 1500, 99999, 99999];
 
 let qi = 0;
 let ans = {};
@@ -219,14 +213,14 @@ function ask() {
 
     <div class="opts">
       ${x.o.map((t, i) =>
-        `<button data-i="${i}">${t}</button>`
+        `<button type="button" data-i="${i}">${t}</button>`
       ).join('')}
     </div>
   `;
 
   box.querySelectorAll('button').forEach(b => {
     b.onclick = () => {
-      ans[x.k] = +b.dataset.i;
+      ans[x.k] = Number(b.dataset.i);
       qi++;
 
       if (qi < Q.length) {
@@ -239,98 +233,130 @@ function ask() {
 }
 
 function done() {
-  const sc = PRODUCTS.map(p => {
-    let s = 0;
 
-    const m = META[p.n];
-    const g = ['Men', 'Women'][ans.who];
+  // STRICT BUDGET FILTER
+  const budgetRanges = [
+    [0, 999],
+    [1000, 1500],
+    [1501, Infinity],
+    [0, Infinity]
+  ];
 
-    if (
-      ans.who === 2 ||
-      p.c === 'Unisex' ||
-      p.c === 'Attar' ||
-      p.c === g
-    ) {
-      s += 2;
-    }
+  const [minPrice, maxPrice] = budgetRanges[ans.bud];
 
-    if (ans.who < 2 && p.c === g) {
-      s += 2;
-    }
+  let matches = PRODUCTS.filter(p =>
+    p.p >= minPrice && p.p <= maxPrice
+  );
 
-    if (m[0] === ans.fam) {
-      s += 4;
-    }
-
-    if (MOOD[ans.mood].includes(m[0])) {
-      s += 2;
-    }
-
-    if (
-      m[2] === 2 ||
-      ans.seas === 2 ||
-      m[2] === ans.seas
-    ) {
-      s += 2;
-    }
-
-    s += Math.max(
-      0,
-      3 - Math.abs(m[1] - ans.str) * 2
+  // FILTER BY SPRAY OR ATTAR
+  if (ans.type === 0) {
+    matches = matches.filter(p =>
+      p.c !== 'Attar'
     );
+  } else if (ans.type === 1) {
+    matches = matches.filter(p =>
+      p.c === 'Attar'
+    );
+  }
 
-    if (ans.type === 1 && p.c === 'Attar') {
-      s += 4;
+  // FILTER BY GENDER
+  if (ans.who !== 2) {
+    const gender = ans.who === 0 ? 'Men' : 'Women';
+
+    matches = matches.filter(p =>
+      p.c === gender ||
+      p.c === 'Unisex' ||
+      p.c === 'Attar'
+    );
+  }
+
+  // RANK PRODUCTS ACCORDING TO PREFERENCES
+  const ranked = matches.map(p => {
+    let score = 0;
+
+    if (p.fam === ans.fam) {
+      score += 5;
     }
 
-    if (ans.type === 0 && p.c !== 'Attar') {
-      s += 3;
+    if (MOOD[ans.mood].includes(p.fam)) {
+      score += 2;
     }
 
-    if (ans.occ === 2 && p.c === 'Attar') {
-      s += 2;
+    if (
+      p.season === ans.seas ||
+      p.season === 2 ||
+      ans.seas === 2
+    ) {
+      score += 2;
     }
 
-    if (ans.occ === 1 && p.p >= 1300) {
-      s += 1;
+    if (p.strength === ans.str) {
+      score += 3;
     }
 
     if (ans.occ === 0 && p.p <= 1300) {
-      s += 1;
+      score += 1;
     }
 
-    if (p.p <= LIM[ans.bud]) {
-      s += 3;
-    } else {
-      s -= 3;
+    if (ans.occ === 1 && p.strength >= 1) {
+      score += 1;
     }
 
-    return { p, s };
-  })
-  .sort((a, b) => b.s - a.s)
-  .slice(0, 2);
+    if (ans.occ === 2 && p.c === 'Attar') {
+      score += 1;
+    }
 
-  box.innerHTML = `
-    <div class="bar">
-      <i style="width:100%"></i>
-    </div>
+    return { p, score };
+  });
 
-    <div class="step">YOUR MATCHES</div>
+  ranked.sort((a, b) => b.score - a.score);
 
-    <h3>We think you will love these</h3>
+  const results = ranked.slice(0, 2);
 
-    <div class="res">
-      ${sc.map(r => card(r.p)).join('')}
-    </div>
+  // DISPLAY RESULTS
+  if (results.length === 0) {
+    box.innerHTML = `
+      <div class="bar">
+        <i style="width:100%"></i>
+      </div>
 
-    <a class="btn" href="collection.html">
-      SEE FULL COLLECTION
-    </a>
+      <div class="step">YOUR RESULTS</div>
 
-    <button class="btn ghost" id="again">
-      TAKE QUIZ AGAIN
-    </button>
-  `;
+      <h3>No exact matches found</h3>
+
+      <p>
+        There are currently no perfumes matching
+        your selected budget and preferences.
+        Try changing your budget or perfume type.
+      </p>
+
+      <button type="button" class="btn ghost" id="again">
+        TAKE QUIZ AGAIN
+      </button>
+    `;
+  } else {
+    box.innerHTML = `
+      <div class="bar">
+        <i style="width:100%"></i>
+      </div>
+
+      <div class="step">YOUR MATCHES</div>
+
+      <h3>We think you will love these</h3>
+
+      <div class="res">
+        ${results.map(r => card(r.p)).join('')}
+      </div>
+
+      <a class="btn" href="collection.html">
+        SEE FULL COLLECTION
+      </a>
+
+      <button type="button" class="btn ghost" id="again">
+        TAKE QUIZ AGAIN
+      </button>
+    `;
+  }
 
   document.getElementById('again').onclick = () => {
     qi = 0;
